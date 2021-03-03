@@ -6,7 +6,7 @@ variable "aws_access_key" {}
 variable "aws_secret_key" {}
 
 variable "bucket_name" {
-  default = "red30-tfstate"
+  default = "blue30-tfstate"
 }
 
 # //////////////////////////////
@@ -15,7 +15,7 @@ variable "bucket_name" {
 provider "aws" {
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
-  region = "us-east-2"
+  region = "us-west-1"
 }
 
 # //////////////////////////////
@@ -28,7 +28,7 @@ data "aws_iam_user" "terraform" {
 # //////////////////////////////
 # S3 BUCKET
 # //////////////////////////////
-resource "aws_s3_bucket" "red30-tfremotestate" {
+resource "aws_s3_bucket" "blue30-tfremotestate" {
   bucket = var.bucket_name
   force_destroy = true
   acl = "private"
@@ -56,8 +56,8 @@ resource "aws_s3_bucket" "red30-tfremotestate" {
 EOF
 }
 
-resource "aws_s3_bucket_public_access_block" "red30-tfremotestate" {
-  bucket = aws_s3_bucket.red30-tfremotestate.id
+resource "aws_s3_bucket_public_access_block" "blue30-tfremotestate" {
+  bucket = aws_s3_bucket.blue30-tfremotestate.id
 
   block_public_acls   = true
   block_public_policy = true
@@ -69,7 +69,7 @@ resource "aws_s3_bucket_public_access_block" "red30-tfremotestate" {
 # DYNAMODB TABLE
 # //////////////////////////////
 resource "aws_dynamodb_table" "tf_db_statelock" {
-  name           = "red30-tfstatelock"
+  name           = "blue30-tfstatelock"
   read_capacity  = 20
   write_capacity = 20
   hash_key       = "LockID"
